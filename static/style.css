@@ -1,0 +1,41 @@
+body { font-family: "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9; margin: 0; }
+.header { background: #161b22; padding: 25px; text-align: center; border-bottom: 1px solid #30363d; }
+.update-area { background: #0d1117; padding: 10px; text-align: center; border-bottom: 1px solid #30363d; }
+.update-btn { 
+    display: inline-block; background: #21262d; color: #58a6ff; padding: 6px 12px; 
+    text-decoration: none; border-radius: 6px; margin: 4px; font-size: 13px; border: 1px solid #30363d;
+}
+.update-btn:hover { background: #30363d; }
+.tabs { display: flex; overflow-x: auto; background: #161b22; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #30363d; }
+.tab-btn { color: #8b949e; padding: 12px 20px; cursor: pointer; border: none; background: none; font-size: 15px; }
+.tab-btn.active { color: #58a6ff; border-bottom: 2px solid #58a6ff; font-weight: bold; }
+.content { padding: 15px; }
+.const-section { display: none; }
+table { width: 100%; border-collapse: collapse; background: #161b22; }
+thead th { position: sticky; top: 46px; background: #21262d; z-index: 90; padding: 12px; border: 1px solid #30363d; font-size: 12px; text-transform: uppercase; }
+td { border: 1px solid #30363d; padding: 10px; text-align: center; }
+.jacket { width: 70px; height: 70px; border-radius: 4px; object-fit: cover; }
+.title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
+.score-val { font-family: 'Consolas', monospace; font-size: 17px; }
+
+/* スコアの色 */
+.sss-plus { color: #ff79c6; font-weight: bold; }
+.sss { color: #f1fa8c; font-weight: bold; }
+
+/* SSS+達成時のセル背景（オレンジ） */
+.sss-complete { 
+    background-color: rgba(255, 140, 0, 0.4) !important; 
+    color: #ffffff; 
+    font-weight: bold;
+}
+.check { color: #ffee00; margin-left: 3px; font-weight: bold; }
+
+/* 人数に応じたジャケット背景色（Music列） */
+.bg-count-0.col-music { background-color: rgba(255, 85, 85, 0.1) !important; border-left: 3px solid #ff5555; }
+.bg-count-1.col-music { background-color: rgba(255, 184, 108, 0.1) !important; border-left: 3px solid #ffb86c; }
+.bg-count-2.col-music { background-color: rgba(241, 250, 140, 0.1) !important; border-left: 3px solid #f1fa8c; }
+.bg-count-3.col-music { background-color: rgba(80, 250, 123, 0.15) !important; border-left: 3px solid #50fa7b; }
+.bg-count-4.col-music { background-color: rgba(139, 233, 253, 0.15) !important; border-left: 3px solid #8be9fd; }
+.bg-count-5.col-music { background-color: rgba(189, 147, 249, 0.2) !important; border-left: 3px solid #bd93f9; }
+
+.col-music { padding: 8px !important; vertical-align: middle; }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHUNITHM SSS PROGRESS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header"><h1>CHUNITHM SSS PROGRESS</h1></div>
+<div class="update-area">
+    {% for p in player_config_for_html %}
+    <a href="/update/{{ p.name }}/{{ p.user_id }}" class="update-btn">{{ p.name.upper() }} UPDATE</a>
+    {% endfor %}
+</div>
+<div class="tabs">
+    {% for const in sorted_keys %}
+    <button class="tab-btn" id="btn-{{ const.replace('.', '_') }}" onclick="showConst('{{ const }}')">{{ const }}</button>
+    {% endfor %}
+</div>
+<div class="content">
+    {% for const, songs in grouped_data.items() %}
+    <div id="section-{{ const }}" class="const-section">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 180px;">Music</th>
+                    {% for name in player_names %}<th>{{ name }}</th>{% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for song in songs %}
+                <tr class="row-song">
+                    <td class="col-music bg-count-{{ song.sss_count }}">
+                        <img src="{{ song.jacket }}" class="jacket"><br>
+                        <span class="title">{{ song.title }}</span>
+                    </td>
+                    {% for name in player_names %}
+                    {% set p = song.scores[name] %}
+                    <td class="{% if p.is_sss %}sss-complete{% elif p.val >= 1010000 %}sss-plus{% elif p.val >= 1009000 %}sss{% endif %}">
+                        <span class="score-val">{{ "{:,}".format(p.val) }}</span>
+                        {% if p.is_sss %}<span class="check">✔</span>{% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    function showConst(constVal) {
+        document.querySelectorAll('.const-section').forEach(el => el.style.display = 'none');
+        document.getElementById('section-' + constVal).style.display = 'block';
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('btn-' + constVal.replace('.', '_')).classList.add('active');
+    }
+    window.onload = function() {
+        const firstTab = "{{ sorted_keys[0] if sorted_keys else '' }}";
+        if (firstTab) showConst(firstTab);
+    };
+</script>
+</body>
+</html>
