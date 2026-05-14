@@ -1,7 +1,4 @@
 import os
-from dotenv import load_dotenv  # ←これ追加
-
-load_dotenv()  # ←これ追加。これで .env の中身が読み込まれます
 import requests
 from flask import Flask, render_template, redirect
 from pyairtable import Table
@@ -42,11 +39,15 @@ def index():
         
         scores = {}
         sss_count = 0
+        sss_1009_count = 0
+        max_score = 0
         for name in player_names:
             val = f.get(f"{name}_Score", 0)
             is_sss = f.get(name, False)
             scores[name] = {"val": val, "is_sss": is_sss}
             if is_sss: sss_count += 1
+            if val >= 1009000: sss_1009_count += 1
+            if val > max_score: max_score = val
 
         # アタッチメント画像取得
         jacket_attachments = f.get('ジャケット', [])
@@ -57,7 +58,9 @@ def index():
             "diff": f.get('難易度', ''),
             "jacket": jacket_url,
             "scores": scores,
-            "sss_count": sss_count
+            "sss_count": sss_count,
+            "sss_1009_count": sss_1009_count,
+            "max_score": max_score
         }
         
         if const not in grouped_data:
@@ -67,9 +70,15 @@ def index():
     # 定数順に並べ替え
     sorted_keys = sorted(grouped_data.keys(), key=lambda x: float(x), reverse=True)
 
-    # 達成人数が多い順に並べ替え
+    # 指定された優先順位で並べ替え
+    # 1. SSS達成人数 (sss_count)
+    # 2. 1009000以上達成人数 (sss_1009_count)
+    # 3. 5人の中の最高スコア (max_score)
+    # 全て同じならタイトル順
     for const in sorted_keys:
-        grouped_data[const].sort(key=lambda x: (-x['sss_count'], x['title']))
+        grouped_data[const].sort(
+            key=lambda x: (-x['sss_count'], -x['sss_1009_count'], -x['max_score'], x['title'])
+        )
 
     return render_template("index.html", 
                            grouped_data=grouped_data, 
@@ -78,4 +87,4 @@ def index():
                            player_config_for_html=PLAYER_CONFIG)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run()
