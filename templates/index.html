@@ -12,6 +12,7 @@
     {% for p in player_config_for_html %}
     <a href="/update/{{ p.name }}/{{ p.user_id }}" class="update-btn">{{ p.name.upper() }} UPDATE</a>
     {% endfor %}
+    <a href="/update_master" class="update-btn" style="background: #238636; color: white; border-color: #2ea44f;">SONG MASTER UPDATE</a>
 </div>
 <div class="tabs">
     {% for const in sorted_keys %}
@@ -24,7 +25,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="col-music">Music</th>
+                    <th style="width: 180px;">Music</th>
                     {% for name in player_names %}<th>{{ name }}</th>{% endfor %}
                 </tr>
             </thead>

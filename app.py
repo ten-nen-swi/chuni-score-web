@@ -169,5 +169,71 @@ def update_player_score(name, user_id):
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream', headers={'X-Accel-Buffering': 'no'})
 
+@app.route("/update_master")
+def update_master():
+    if request.headers.get('Accept') != 'text/event-stream':
+        return render_template("update.html")
+
+    def generate():
+        yield "data: === 楽曲データ全件登録処理開始 ===\n\n"
+        
+        yield "data: chunirecから楽曲データを取得中...\n\n"
+        try:
+            res = requests.get("https://api.chunirec.net/2.0/music/showall.json", 
+                               params={"token": CHUNI_TOKEN, "region": "jp2"})
+            music_data = res.json()
+        except Exception as e:
+            yield f"data: [!] chunirec APIエラー: {e}\n\n"
+            return
+
+        yield "data: Airtableから既存データを確認中...\n\n"
+        try:
+            existing_records = table.all()
+            existing_keys = [f"{r['fields'].get('タイトル')}_{r['fields'].get('難易度')}" 
+                             for r in existing_records if r['fields'].get('タイトル')]
+        except Exception as e:
+            yield f"data: [!] Airtable読み込み失敗: {e}\n\n"
+            return
+
+        count = 0
+        target_diffs = ["EXP", "MAS", "ULT"]
+
+        for song in music_data:
+            title = song.get('meta', {}).get('title')
+            song_id = song.get('meta', {}).get('id')
+            data_block = song.get('data', {})
+
+            for diff in target_diffs:
+                diff_info = data_block.get(diff)
+                if not diff_info: continue
+                
+                const_val = float(diff_info.get('const') or diff_info.get('level') or 0.0)
+                const_str = "{:.1f}".format(const_val)
+
+                # 14.0以上 かつ 未登録なら作成
+                if const_val >= 14.0 and f"{title}_{diff}" not in existing_keys:
+                    try:
+                        table.create({
+                            "ID": int(song_id),
+                            "タイトル": str(title),
+                            "難易度": str(diff),
+                            "定数": const_str
+                        })
+                        count += 1
+                        yield f"data: 【登録】{title} ({diff}) / 定数: {const_str}\n\n"
+                        
+                        time.sleep(0.25)
+                        if count >= UPDATE_BATCH_SIZE:
+                            yield f"data: --- 50件に達したため一時停止します ---\n\n"
+                            yield "data: BATCH_FINISHED\n\n"
+                            return
+                    except Exception as e:
+                        yield f"data: [!] 登録失敗: {title} ({diff}) - {e}\n\n"
+
+        yield f"data: --- 完了！ 新たに {count} 件の楽曲を登録しました ---\n\n"
+        yield "data: FINISHED\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream', headers={'X-Accel-Buffering': 'no'})
+
 if __name__ == "__main__":
     app.run()
