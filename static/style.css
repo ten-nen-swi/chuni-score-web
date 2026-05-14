@@ -17,7 +17,7 @@ table { width: 100%; border-collapse: collapse; background: #161b22; table-layou
 thead th { background: #21262d; padding: 4px 2px; border: 1px solid #30363d; font-size: 10px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; }
 td { border: 1px solid #30363d; padding: 4px 1px; text-align: center; vertical-align: middle; }
 
-.jacket { width: 35px; height: 35px; border-radius: 2px; object-fit: cover; }
+.jacket { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; }
 
 /* ULTIMA専用の赤黒枠（工事現場風） */
 .jacket-ult {
@@ -43,7 +43,13 @@ td { border: 1px solid #30363d; padding: 4px 1px; text-align: center; vertical-a
     background: #8800FF;
 }
 
-.title { font-weight: bold; font-size: 10px; display: block; margin-top: 2px; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.title {
+    font-weight: bold;
+    font-size: 10px;
+    display: block;
+    margin-top: 2px;
+    line-height: 1.2;
+}
 .score-val { font-family: 'Consolas', monospace; font-size: 11px; display: block; line-height: 1.1; }
 .score-part { display: inline-block; white-space: nowrap; }
 
