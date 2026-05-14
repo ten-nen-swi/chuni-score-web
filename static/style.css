@@ -6,13 +6,14 @@ body { font-family: "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9;
     text-decoration: none; border-radius: 6px; margin: 4px; font-size: 13px; border: 1px solid #30363d;
 }
 .update-btn:hover { background: #30363d; }
-.tabs { display: flex; overflow-x: auto; background: #161b22; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #30363d; }
-.tab-btn { color: #8b949e; padding: 12px 20px; cursor: pointer; border: none; background: none; font-size: 15px; }
+.tabs { display: flex; overflow-x: auto; white-space: nowrap; background: #161b22; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #30363d; height: 45px; }
+.tab-btn { color: #8b949e; padding: 0 15px; cursor: pointer; border: none; background: none; font-size: 14px; line-height: 45px; height: 45px; }
 .tab-btn.active { color: #58a6ff; border-bottom: 2px solid #58a6ff; font-weight: bold; }
+
 .content { padding: 15px; }
 .const-section { display: none; }
 table { width: 100%; border-collapse: collapse; background: #161b22; }
-thead th { position: sticky; top: 46px; background: #21262d; z-index: 90; padding: 12px; border: 1px solid #30363d; font-size: 12px; text-transform: uppercase; }
+thead th { position: sticky; top: 45px; background: #21262d; z-index: 90; padding: 10px; border: 1px solid #30363d; font-size: 12px; text-transform: uppercase; }
 td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 .jacket { width: 70px; height: 70px; border-radius: 4px; object-fit: cover; }
 .title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
@@ -59,15 +60,20 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 .bg-count-5.col-music { background-color: rgba(189, 147, 249, 0.2) !important; border-left: 3px solid #bd93f9; }
 
 .col-music { padding: 8px !important; vertical-align: middle; }
+.col-music { min-width: 160px; }
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
-    .header h1 { font-size: 1.5rem; }
-    .jacket { width: 50px; height: 50px; }
-    .score-val { font-size: 14px; }
-    th, td { padding: 5px !important; font-size: 11px; }
-    .title { font-size: 11px; }
-    /* 横スクロールを維持しつつフォントサイズを最適化 */
-    .content { padding: 5px; overflow-x: auto; }
-    table { min-width: 600px; }
+    .header { padding: 10px; }
+    .header h1 { font-size: 1.1rem; }
+    .update-area { padding: 5px; }
+    .update-btn { font-size: 10px; padding: 3px 6px; margin: 2px; }
+    .jacket { width: 40px; height: 40px; }
+    .score-val { font-size: 12px; }
+    th, td { padding: 4px 2px !important; font-size: 10px; }
+    .title { font-size: 10px; line-height: 1.1; margin-top: 2px; }
+    .col-music { min-width: 90px !important; width: 90px !important; }
+    /* コンテンツの余白をゼロにして横幅を確保 */
+    .content { padding: 0; overflow-x: auto; }
+    table { min-width: 450px; }
 }
