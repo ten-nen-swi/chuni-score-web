@@ -40,7 +40,6 @@
                     {% set p = song.scores[name] %}
                     <td class="{% if p.val >= 1010000 %}sss-plus{% elif p.val >= 1009000 %}sss{% elif p.is_sss %}sss-complete{% endif %}">
                         <span class="score-val">{{ "{:,}".format(p.val) }}</span>
-                        {% if p.is_sss %}<span class="check">✔</span>{% endif %}
                     </td>
                     {% endfor %}
                 </tr>

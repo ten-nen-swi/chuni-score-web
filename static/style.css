@@ -44,7 +44,7 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 }
 
 .title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
-.score-val { font-family: 'Consolas', monospace; font-size: 17px; }
+.score-val { font-family: 'Consolas', monospace; font-size: 17px; display: block; word-break: break-all; line-height: 1.2; }
 
 /* スコアの背景 (1,010,000+) - 鮮やかな虹色アニメーション */
 .sss-plus { 
@@ -76,7 +76,6 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
     color: #ffffff; 
     font-weight: bold;
 }
-.check { color: #ffee00; margin-left: 3px; font-weight: bold; }
 
 /* 人数に応じたジャケット背景色（Music列） */
 .bg-count-0.col-music { background-color: rgba(255, 85, 85, 0.1) !important; border-left: 3px solid #ff5555; }
