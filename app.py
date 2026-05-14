@@ -136,8 +136,8 @@ def update_player_score(name, user_id):
                 continue
 
             count_checked += 1
-            # 10件ごとに進捗を出してタイムアウトを防ぐ
-            if count_checked % 10 == 0:
+            # 100件ごとに進捗を出してタイムアウトを防ぐ
+            if count_checked % 100 == 0:
                 yield f"data: ... {count_checked}件チェック中\n\n"
 
             key = f"{str(c.get('id'))}_{c.get('diff')}"
