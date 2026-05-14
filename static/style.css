@@ -18,9 +18,29 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 .title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
 .score-val { font-family: 'Consolas', monospace; font-size: 17px; }
 
-/* スコアの色 */
-.sss-plus { color: #ff79c6; font-weight: bold; }
-.sss { color: #f1fa8c; font-weight: bold; }
+/* スコアの背景 (1,010,000+) - 鮮やかな虹色アニメーション */
+.sss-plus { 
+    background: linear-gradient(120deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff) !important;
+    background-size: 200% 200% !important;
+    color: #ffffff !important; 
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    animation: rainbow-animation 3s linear infinite;
+}
+
+/* スコアの背景 (1,009,000+) - パステル虹色 */
+.sss { 
+    background: linear-gradient(120deg, #ffadad, #ffd6a5, #fdffb6, #caffbf, #9bf6ff, #a0c4ff, #bdb2ff) !important; 
+    color: #1c1f23 !important; 
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes rainbow-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
 /* SSS+達成時のセル背景（オレンジ） */
 .sss-complete { 
@@ -39,3 +59,15 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 .bg-count-5.col-music { background-color: rgba(189, 147, 249, 0.2) !important; border-left: 3px solid #bd93f9; }
 
 .col-music { padding: 8px !important; vertical-align: middle; }
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .header h1 { font-size: 1.5rem; }
+    .jacket { width: 50px; height: 50px; }
+    .score-val { font-size: 14px; }
+    th, td { padding: 5px !important; font-size: 11px; }
+    .title { font-size: 11px; }
+    /* 横スクロールを維持しつつフォントサイズを最適化 */
+    .content { padding: 5px; overflow-x: auto; }
+    table { min-width: 600px; }
+}

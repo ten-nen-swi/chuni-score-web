@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv  # ←これ追加
+
+load_dotenv()  # ←これ追加。これで .env の中身が読み込まれます
 import requests
 from flask import Flask, render_template, redirect
 from pyairtable import Table
