@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updating Scores...</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .log-container {
+            background: #000; color: #0f0; font-family: 'Consolas', monospace;
+            padding: 20px; height: 70vh; overflow-y: auto; border-radius: 8px;
+            font-size: 14px; line-height: 1.4; white-space: pre-wrap;
+        }
+        .finished-btn { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header"><h1>Score Update Log</h1></div>
+    <div class="content">
+        <div id="log" class="log-container">接続準備中...<br></div>
+        <a href="/" id="back-btn" class="update-btn finished-btn" style="text-align:center; display:block; width:200px; margin: 20px auto;">TOPに戻る</a>
+    </div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+        const backBtn = document.getElementById('back-btn');
+        // URLの末尾（/update/name/id）をそのままEventSourceのパスとして使う
+        const eventSource = new EventSource(window.location.pathname);
+
+        eventSource.onmessage = function(e) {
+            if (logDiv.innerHTML === "接続準備中...<br>") logDiv.innerHTML = "";
+            
+            if (e.data === "FINISHED") {
+                logDiv.innerHTML += "\n=== すべての処理が完了しました ===\n";
+                eventSource.close();
+                backBtn.style.display = 'block';
+            } else if (e.data === "BATCH_FINISHED") {
+                logDiv.innerHTML += "\n=== 50件更新しました。続きがある場合は「更新を続ける」を押してください ===\n";
+                eventSource.close();
+                backBtn.textContent = "更新を続ける";
+                backBtn.style.display = 'block';
+            } else {
+                logDiv.innerHTML += e.data + "\n";
+            }
+            logDiv.scrollTop = logDiv.scrollHeight;
+        };
+
+        eventSource.onerror = function() {
+            logDiv.innerHTML += "\n[!] 接続が切断されました。処理が完了したか、エラーが発生した可能性があります。\n";
+            eventSource.close();
+            backBtn.style.display = 'block';
+        };
+    </script>
+</body>
+</html>

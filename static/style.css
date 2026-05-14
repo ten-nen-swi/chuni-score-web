@@ -12,9 +12,12 @@ body { font-family: "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9;
 
 .content { padding: 15px; }
 .const-section { display: none; }
-table { width: 100%; border-collapse: collapse; background: #161b22; }
-thead th { position: sticky; top: 45px; background: #21262d; z-index: 90; padding: 10px; border: 1px solid #30363d; font-size: 12px; text-transform: uppercase; }
-td { border: 1px solid #30363d; padding: 10px; text-align: center; }
+/* sticky headerのズレを防ぐため collapse ではなく separate を使用 */
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: #161b22; }
+thead th { position: sticky; top: 44px; background: #21262d; z-index: 90; padding: 10px; border-bottom: 1px solid #30363d; border-right: 1px solid #30363d; font-size: 12px; text-transform: uppercase; }
+thead th:first-child { border-left: 1px solid #30363d; }
+td { border-bottom: 1px solid #30363d; border-right: 1px solid #30363d; padding: 10px; text-align: center; }
+td:first-child { border-left: 1px solid #30363d; }
 .jacket { width: 70px; height: 70px; border-radius: 4px; object-fit: cover; }
 .title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
 .score-val { font-family: 'Consolas', monospace; font-size: 17px; }
@@ -70,10 +73,11 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
     .update-btn { font-size: 10px; padding: 3px 6px; margin: 2px; }
     .jacket { width: 40px; height: 40px; }
     .score-val { font-size: 12px; }
-    th, td { padding: 4px 2px !important; font-size: 10px; }
+    /* スマホで文字が被らないよう高さを確保 */
+    thead th { top: 44px; padding: 8px 2px !important; }
+    td { padding: 6px 2px !important; font-size: 10px; }
     .title { font-size: 10px; line-height: 1.1; margin-top: 2px; }
     .col-music { min-width: 90px !important; width: 90px !important; }
-    /* コンテンツの余白をゼロにして横幅を確保 */
     .content { padding: 0; overflow-x: auto; }
     table { min-width: 450px; }
 }

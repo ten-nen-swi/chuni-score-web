@@ -1,6 +1,7 @@
 import os
 import requests
-from flask import Flask, render_template, redirect
+import time
+from flask import Flask, render_template, redirect, Response, stream_with_context, request
 from pyairtable import Table
 
 app = Flask(__name__)
@@ -12,6 +13,7 @@ AIRTABLE_API_KEY = os.environ.get("AIRTABLE_API_KEY")
 BASE_ID = os.environ.get("BASE_ID")
 TABLE_NAME = os.environ.get("TABLE_NAME")
 
+UPDATE_BATCH_SIZE = 50 # 1回の更新でAirtableに書き込む最大件数
 # プレイヤーリスト
 PLAYER_CONFIG = [
     {"name": "mea", "user_id": "tennenswi"},
@@ -85,6 +87,87 @@ def index():
                            sorted_keys=sorted_keys, 
                            player_names=player_names,
                            player_config_for_html=PLAYER_CONFIG)
+
+@app.route("/update/<name>/<user_id>")
+def update_player_score(name, user_id):
+    # ブラウザでアクセスした時、最初は画面(HTML)を返す
+    # JavaScript(EventSource)からのリクエストは Accept ヘッダーがこれになる
+    if request.headers.get('Accept') != 'text/event-stream':
+        return render_template("update.html")
+
+    def generate():
+        yield f"data: === {name.upper()} (User: {user_id}) 同期開始 ===\n\n"
+        
+        if not CHUNI_TOKEN or not AIRTABLE_API_KEY:
+            yield "data: [!] APIキーまたはトークンが設定されていません。\n\n"
+            return
+
+        # Airtableから現在のデータを取得
+        yield "data: Airtableから全楽曲データを読み込み中...\n\n"
+        try:
+            a_records = table.all()
+            a_map = {f"{str(r['fields'].get('ID'))}_{r['fields'].get('難易度')}": r for r in a_records}
+        except Exception as e:
+            yield f"data: [!] Airtable読み込み失敗: {e}\n\n"
+            return
+
+        # chunirec APIから取得
+        url = "https://api.chunirec.net/2.0/records/showall.json"
+        params = {"token": CHUNI_TOKEN, "user_name": user_id, "region": "jp2"}
+        
+        try:
+            res = requests.get(url, params=params)
+            c_data = res.json().get('records', [])
+            if not c_data:
+                yield "data: [!] chunirecからデータが取得できませんでした。\n\n"
+                return
+        except Exception as e:
+            yield f"data: [!] chunirec通信エラー: {e}\n\n"
+            return
+
+        count_upd = 0
+        count_checked = 0
+        score_col = f"{name}_Score"
+        check_col = name
+
+        for c in c_data:
+            # 定数13.9以下はスキップ（元のスクリプト通り）
+            if float(c.get('const', 0)) <= 13.9:
+                continue
+
+            count_checked += 1
+            # 10件ごとに進捗を出してタイムアウトを防ぐ
+            if count_checked % 10 == 0:
+                yield f"data: ... {count_checked}件チェック中\n\n"
+
+            key = f"{str(c.get('id'))}_{c.get('diff')}"
+
+            if key in a_map:
+                a_row = a_map[key]
+                c_score = int(c.get('score', 0))
+                current_score = a_row['fields'].get(score_col, 0)
+
+                # スコアが上がっている場合のみ更新
+                if c_score > current_score:
+                    try:
+                        table.update(a_row['id'], {
+                            score_col: c_score,
+                            check_col: True if c_score >= 1007500 else False
+                        })
+                        yield f"data: {c.get('title')} ({c.get('diff')}) : {current_score:,} -> {c_score:,} 更新完了\n\n"
+                        count_upd += 1
+                        time.sleep(0.2) # Airtableのレートリミット対策
+                        if count_upd >= UPDATE_BATCH_SIZE:
+                            yield f"data: --- {name.upper()} 50件更新に達したため一時停止します ---\n\n"
+                            yield "data: BATCH_FINISHED\n\n"
+                            return
+                    except Exception as e:
+                        yield f"data: [!] {c.get('title')} 更新失敗: {e}\n\n"
+
+        yield f"data: --- {name.upper()} 完了！ 更新: {count_upd}件 ---\n\n"
+        yield "data: FINISHED\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream', headers={'X-Accel-Buffering': 'no'})
 
 if __name__ == "__main__":
     app.run()
