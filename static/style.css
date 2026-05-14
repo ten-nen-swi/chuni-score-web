@@ -10,18 +10,18 @@ body { font-family: "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9;
 .tab-btn { color: #8b949e; padding: 0 15px; cursor: pointer; border: none; background: none; font-size: 14px; line-height: 45px; height: 45px; }
 .tab-btn.active { color: #58a6ff; border-bottom: 2px solid #58a6ff; font-weight: bold; }
 
-.content { padding: 15px; overflow-x: auto; }
+.content { padding: 5px; overflow-x: hidden; width: 100%; } /* 横スクロールを完全に禁止 */
 .const-section { display: none; }
 
-table { width: 100%; border-collapse: collapse; background: #161b22; }
-thead th { background: #21262d; padding: 12px; border: 1px solid #30363d; font-size: 12px; text-transform: uppercase; }
-td { border: 1px solid #30363d; padding: 10px; text-align: center; }
+table { width: 100%; border-collapse: collapse; background: #161b22; table-layout: fixed; min-width: 0; } /* min-width: 0 を追加してテーブルが縮むのを助ける */
+thead th { background: #21262d; padding: 4px 2px; border: 1px solid #30363d; font-size: 10px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; }
+td { border: 1px solid #30363d; padding: 4px 1px; text-align: center; vertical-align: middle; }
 
-.jacket { width: 70px; height: 70px; border-radius: 4px; object-fit: cover; }
+.jacket { width: 35px; height: 35px; border-radius: 2px; object-fit: cover; }
 
 /* ULTIMA専用の赤黒枠（工事現場風） */
 .jacket-ult {
-    padding: 3px;
+    padding: 2px;
     background: repeating-linear-gradient(
         -45deg,
         #DD0000, /* 明るく鮮やかな赤 */
@@ -33,19 +33,29 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 
 /* EXPERT専用の赤枠（一色） */
 .jacket-exp {
-    padding: 3px;
+    padding: 2px;
     background: #DD0000;
 }
 
 /* MASTER専用の紫枠 */
 .jacket-mas {
-    padding: 3px;
+    padding: 2px;
     background: #8800FF;
 }
 
-.title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
-.score-val { font-family: 'Consolas', monospace; font-size: 17px; display: block; line-height: 1.2; }
+.title { font-weight: bold; font-size: 10px; display: block; margin-top: 2px; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.score-val { font-family: 'Consolas', monospace; font-size: 11px; display: block; line-height: 1.1; }
 .score-part { display: inline-block; white-space: nowrap; }
+
+/* 列幅の定義 */
+th.col-music, td.col-music {
+    width: 25%; /* Music列は25% */
+}
+/* プレイヤー列 (Music列以外) */
+thead th:nth-child(n+2),
+td:nth-child(n+2) {
+    width: 15%; /* 各プレイヤー列は15% (5人 x 15% = 75%) */
+}
 
 /* スコアの背景 (1,010,000+) - 鮮やかな虹色アニメーション */
 .sss-plus { 
@@ -53,7 +63,7 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
     background-size: 200% 200% !important;
     color: #ffffff !important; 
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8); /* 以前の変更を維持 */
     animation: rainbow-animation 3s linear infinite;
 }
 
@@ -85,6 +95,3 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 .bg-count-3.col-music { background-color: rgba(80, 250, 123, 0.15) !important; border-left: 3px solid #50fa7b; }
 .bg-count-4.col-music { background-color: rgba(139, 233, 253, 0.15) !important; border-left: 3px solid #8be9fd; }
 .bg-count-5.col-music { background-color: rgba(189, 147, 249, 0.2) !important; border-left: 3px solid #bd93f9; }
-
-.col-music { padding: 8px !important; vertical-align: middle; }
-.col-music { min-width: 160px; }
