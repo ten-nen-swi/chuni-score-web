@@ -10,7 +10,7 @@ body { font-family: "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9;
 .tab-btn { color: #8b949e; padding: 0 15px; cursor: pointer; border: none; background: none; font-size: 14px; line-height: 45px; height: 45px; }
 .tab-btn.active { color: #58a6ff; border-bottom: 2px solid #58a6ff; font-weight: bold; }
 
-.content { padding: 15px; }
+.content { padding: 15px; overflow-x: auto; }
 .const-section { display: none; }
 
 table { width: 100%; border-collapse: collapse; background: #161b22; }
@@ -44,7 +44,8 @@ td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 }
 
 .title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
-.score-val { font-family: 'Consolas', monospace; font-size: 17px; display: block; word-break: break-all; line-height: 1.2; }
+.score-val { font-family: 'Consolas', monospace; font-size: 17px; display: block; line-height: 1.2; }
+.score-part { display: inline-block; white-space: nowrap; }
 
 /* スコアの背景 (1,010,000+) - 鮮やかな虹色アニメーション */
 .sss-plus { 

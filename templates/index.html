@@ -39,7 +39,10 @@
                     {% for name in player_names %}
                     {% set p = song.scores[name] %}
                     <td class="{% if p.val >= 1010000 %}sss-plus{% elif p.val >= 1009000 %}sss{% elif p.is_sss %}sss-complete{% endif %}">
-                        <span class="score-val">{{ "{:,}".format(p.val) }}</span>
+                        {% set s = "{:,}".format(p.val) %}
+                        <span class="score-val">
+                            <span class="score-part">{{ s[:-5] }}</span><span class="score-part">{{ s[-5:] }}</span>
+                        </span>
                     </td>
                     {% endfor %}
                 </tr>
