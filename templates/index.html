@@ -33,7 +33,7 @@
                 {% for song in songs %}
                 <tr class="row-song">
                     <td class="col-music bg-count-{{ song.sss_count }}">
-                        <img src="{{ song.jacket }}" class="jacket"><br>
+                        <img src="{{ song.jacket }}" class="jacket {% if song.diff == 'ULT' %}jacket-ult{% elif song.diff == 'EXP' %}jacket-exp{% elif song.diff == 'MAS' %}jacket-mas{% endif %}"><br>
                         <span class="title">{{ song.title }}</span>
                     </td>
                     {% for name in player_names %}

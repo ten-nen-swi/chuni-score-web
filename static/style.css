@@ -18,6 +18,31 @@ thead th { background: #21262d; padding: 12px; border: 1px solid #30363d; font-s
 td { border: 1px solid #30363d; padding: 10px; text-align: center; }
 
 .jacket { width: 70px; height: 70px; border-radius: 4px; object-fit: cover; }
+
+/* ULTIMA専用の赤黒枠（工事現場風） */
+.jacket-ult {
+    padding: 3px;
+    background: repeating-linear-gradient(
+        -45deg,
+        #DD0000, /* 明るく鮮やかな赤 */
+        #DD0000 8px,
+        #000000 8px, /* 真っ黒 */
+        #000000 16px
+    );
+}
+
+/* EXPERT専用の赤枠（一色） */
+.jacket-exp {
+    padding: 3px;
+    background: #DD0000;
+}
+
+/* MASTER専用の紫枠 */
+.jacket-mas {
+    padding: 3px;
+    background: #8800FF;
+}
+
 .title { font-weight: bold; font-size: 13px; display: block; margin-top: 5px; }
 .score-val { font-family: 'Consolas', monospace; font-size: 17px; }
 
