@@ -214,7 +214,7 @@ def update_master():
                 if const_val >= 14.0 and f"{title}_{diff}" not in existing_keys:
                     try:
                         table.create({
-                            "ID": int(song_id),
+                            "ID": str(song_id),
                             "タイトル": str(title),
                             "難易度": str(diff),
                             "定数": const_str
